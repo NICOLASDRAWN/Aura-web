@@ -7,16 +7,17 @@
     <meta name="description" content="AURA gamifica el descubrimiento musical físico mediante Drop Zones. La ciudad es tu escenario.">
     <link rel="stylesheet" href="./style.css">
 </head>
-<body>
+<body class="lenis lenis-smooth">
+    <div id="custom-cursor"></div>
     <div class="noise-overlay"></div>
     <canvas id="liquid-canvas"></canvas>
 
     <nav>
-        <div class="logo">AURA</div>
+        <div class="logo magnetic" data-strength="20">AURA</div>
         <div class="nav-links">
-            <a href="#concept">Concepto</a>
-            <a href="#features">Funciones</a>
-            <a href="#join">Beta</a>
+            <a href="#concept" class="magnetic" data-strength="15">Concepto</a>
+            <a href="#features" class="magnetic" data-strength="15">Funciones</a>
+            <a href="#join" class="magnetic" data-strength="15">Beta</a>
         </div>
     </nav>
 
@@ -72,7 +73,7 @@
                 <p style="margin-bottom: 3rem; opacity: 0.7;">Sé el primero en escuchar la ciudad. Lanzamiento BIME 2026.</p>
                 <form id="waitlist-form" style="display: flex; gap: 1rem; justify-content: center; max-width: 500px; margin: 0 auto;">
                     <input type="email" placeholder="Tu email" required style="flex: 1; padding: 1.2rem 2rem; border-radius: 4rem; border: 1px solid var(--glass-border); background: var(--glass-bg);">
-                    <button type="submit" class="btn">Entrar</button>
+                    <button type="submit" class="btn magnetic" data-strength="30">Entrar</button>
                 </form>
             </div>
         </section>
