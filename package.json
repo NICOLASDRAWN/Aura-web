@@ -1,0 +1,19 @@
+{
+  "name": "aura-web",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0"
+  },
+  "dependencies": {
+    "lottie-web": "^5.12.2",
+    "gsap": "^3.12.5",
+    "canvas-confetti": "^1.9.3"
+  }
+}

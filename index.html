@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AURA | The City's Soundtrack</title>
+    <meta name="description" content="AURA gamifica el descubrimiento musical físico mediante Drop Zones. La ciudad es tu escenario.">
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <div class="noise-overlay"></div>
+    <div class="liquid-bg">
+        <div class="blob"></div>
+    </div>
+
+    <nav>
+        <div class="logo">AURA</div>
+        <div class="nav-links">
+            <a href="#concept">Concepto</a>
+            <a href="#features">Funciones</a>
+            <a href="#join">Beta</a>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1 class="reveal">The City's <span class="italic-serif">Soundtrack</span></h1>
+            <p class="reveal">Descubre música exclusiva explorando tu ciudad. AURA convierte las calles en Drop Zones donde la música cobra vida.</p>
+            <div class="hero-visual reveal">
+                <img src="./hero.png" alt="AURA Experience">
+            </div>
+        </section>
+
+        <!-- Concept Section -->
+        <section id="concept" class="concept">
+            <div class="reveal">
+                <h2 style="font-size: 3.5rem; margin-bottom: 2rem;">La ciudad es tu escenario</h2>
+                <p style="font-size: 1.5rem; max-width: 800px; opacity: 0.8;">AURA no es solo una app de música; es un motor de engagement físico. Gamificamos el descubrimiento musical mediante geovallas que liberan tracks exclusivos, merch y entradas solo cuando estás en el lugar correcto.</p>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features">
+            <h2 class="reveal italic-serif" style="font-size: 3rem; text-align: center;">Geolocalización Generativa</h2>
+            <div class="features-grid">
+                <div class="card reveal">
+                    <h3>Drop Zones</h3>
+                    <p>Zonas invisibles en el mapa que activan contenido exclusivo mediante Mapbox SDK y Geofencing pasivo.</p>
+                </div>
+                <div class="card reveal">
+                    <h3>Fan Engagement</h3>
+                    <p>Gamificación pura. Colecciona tracks como trofeos físicos mientras recorres la ciudad.</p>
+                </div>
+                <div class="card reveal" id="trigger-confetti">
+                    <h3>Conquista</h3>
+                    <p>Haz clic aquí para simular el desbloqueo de una recompensa y siente la energía AURA.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- B2B / Artists Section -->
+        <section class="b2b" style="background: rgba(0,0,0,0.02);">
+            <div class="reveal" style="text-align: center;">
+                <h2 class="italic-serif" style="font-size: 3.5rem; margin-bottom: 2rem;">Para Artistas y Marcas</h2>
+                <p style="font-size: 1.2rem; max-width: 700px; margin: 0 auto; opacity: 0.7;">Campañas hiperlocalizadas y análisis de movilidad. Conecta con tu audiencia en el mundo real, no solo en sus pantallas.</p>
+            </div>
+        </section>
+
+        <!-- Beta Registration -->
+        <section id="join" class="beta" style="text-align: center;">
+            <div class="reveal">
+                <h2 style="font-size: 4rem; margin-bottom: 1rem;">Únete a la <span class="italic-serif">Beta</span></h2>
+                <p style="margin-bottom: 3rem; opacity: 0.7;">Sé el primero en escuchar la ciudad. Lanzamiento BIME 2026.</p>
+                <form id="waitlist-form" style="display: flex; gap: 1rem; justify-content: center; max-width: 500px; margin: 0 auto;">
+                    <input type="email" placeholder="Tu email" required style="flex: 1; padding: 1.2rem 2rem; border-radius: 4rem; border: 1px solid var(--glass-border); background: var(--glass-bg);">
+                    <button type="submit" class="btn">Entrar</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div>AURA &copy; 2026 | Geminispark</div>
+        <div>Liquid Minimalism Design System</div>
+    </footer>
+
+    <script type="module" src="./main.js"></script>
+</body>
+</html>
