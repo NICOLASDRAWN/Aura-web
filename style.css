@@ -240,32 +240,154 @@ section {
   transform: scale(1.05);
 }
 
-/* Cards & Features */
-.features-grid {
+/* Bento Grid V6.0 */
+.bento-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-  margin-top: 5rem;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: minmax(280px, auto);
+  gap: 1.5rem;
+  max-width: 1200px;
+  margin: 5rem auto 0;
 }
 
-.card {
+.bento-item {
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
-  padding: 3rem 2rem;
+  border-radius: 2.5rem;
+  padding: 2.5rem;
+  backdrop-filter: blur(20px);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.4s ease, background 0.4s ease;
+}
+
+.bento-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+  transform: translateY(-5px);
+}
+
+.bento-item.large {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
+.bento-item.medium {
+  grid-column: span 2;
+}
+
+.bento-content h3 {
+  font-size: 2.2rem;
+  margin: 0.5rem 0 1rem;
+  font-family: var(--font-serif);
+}
+
+.bento-img-container {
+  margin-top: 2rem;
+  width: 100%;
+  height: 250px;
+  overflow: hidden;
+  border-radius: 1.5rem;
+  background: rgba(0,0,0,0.1);
+}
+
+.bento-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s ease;
+}
+
+.bento-item:hover .bento-img {
+  transform: scale(1.05);
+}
+
+/* Product Showcase */
+.product-showcase {
+  padding: 15rem 5% 10rem;
+  background: radial-gradient(circle at 80% 50%, rgba(108, 92, 231, 0.08), transparent 50%);
+}
+
+.showcase-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 8rem;
+}
+
+.showcase-text {
+  flex: 1;
+}
+
+.showcase-visual {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  perspective: 1500px;
+}
+
+.phone-mockup {
+  width: 100%;
+  max-width: 380px;
+  border-radius: 3rem;
+  box-shadow: 0 50px 100px -20px rgba(0,0,0,0.4);
+  transform: rotateY(-12deg) rotateX(5deg);
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.showcase-visual:hover .phone-mockup {
+  transform: rotateY(0deg) rotateX(0deg) scale(1.02);
+}
+
+/* Tech Tags */
+.tech-tag-cloud {
+  display: flex;
+  gap: 0.8rem;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+}
+
+.tech-tag {
+  padding: 0.6rem 1.2rem;
+  background: rgba(108, 92, 231, 0.1);
+  border: 1px solid rgba(108, 92, 231, 0.2);
   border-radius: 2rem;
-  backdrop-filter: blur(10px);
-  text-align: center;
-  transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1), background 0.4s ease;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--color-accent);
+  transition: background 0.3s;
 }
 
-.card:hover {
-  transform: translateY(-10px) scale(1.02);
-  background: rgba(255, 255, 255, 0.06);
+.tech-tag:hover {
+  background: rgba(108, 92, 231, 0.2);
 }
 
-.card h3 {
-  font-size: 2rem;
-  margin-bottom: 1rem;
+/* B2B Grid Enhancement */
+.b2b-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 4rem;
+  max-width: 1100px;
+  margin: 5rem auto 0;
+  text-align: left;
+}
+
+.b2b-item h3 {
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  color: var(--color-accent);
+}
+
+@media (max-width: 968px) {
+  .bento-grid { grid-template-columns: 1fr; }
+  .bento-item.large, .bento-item.medium { grid-column: span 1; }
+  .showcase-container { flex-direction: column; text-align: center; gap: 5rem; }
+  .b2b-grid { grid-template-columns: 1fr; gap: 3rem; }
+  .showcase-visual { perspective: none; }
+  .phone-mockup { transform: none; max-width: 300px; }
 }
 
 /* Buttons */

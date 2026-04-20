@@ -7,9 +7,9 @@ import confetti from 'canvas-confetti';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// --- 1. LENIS SMOOTH SCROLL (REFINED V5) ---
+// --- 1. LENIS SMOOTH SCROLL ---
 const lenis = new Lenis({
-    duration: 1.5, // Even smoother
+    duration: 1.5,
     easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
     smoothWheel: true,
 });
@@ -40,14 +40,14 @@ if (cursor) {
     document.addEventListener('mousedown', () => cursor.classList.add('active'));
     document.addEventListener('mouseup', () => cursor.classList.remove('active'));
 
-    const interactiveElements = document.querySelectorAll('a, button, .magnetic');
+    const interactiveElements = document.querySelectorAll('a, button, .magnetic, .bento-item');
     interactiveElements.forEach(el => {
         el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
         el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
     });
 }
 
-// --- 3. MAGNETIC & HUD SYSTEM ---
+// --- 3. MAGNETIC & HUD ENGINE ---
 const magneticElements = document.querySelectorAll('.magnetic');
 magneticElements.forEach(el => {
     el.addEventListener('mousemove', (e) => {
@@ -82,7 +82,7 @@ const hud = document.querySelector('.aura-hud');
 if (hud) {
     window.addEventListener('scroll', () => {
         const opacity = Math.max(0, 1 - window.scrollY / 500);
-        hud.style.opacity = opacity * 0.6; // Keep it subtle
+        hud.style.opacity = opacity * 0.6;
     });
 }
 
@@ -93,13 +93,14 @@ setInterval(() => {
     if (hudItems[1]) hudItems[1].textContent = `LON: ${(74.08 + Math.random() * 0.01).toFixed(4)}° W`;
 }, 2000);
 
-// --- 4. RELIABLE REVEALS (V5 FIX) ---
+// --- 4. BENTO & SHOWCASE REVEALS (V6) ---
 const reveals = [
     { target: '.hero-content', trigger: '.hero' },
     { target: '.concept-content', trigger: '.concept' },
-    { target: '.features-grid', trigger: '.features' },
+    { target: '.bento-item', trigger: '.features', stagger: 0.1 },
+    { target: '.showcase-container', trigger: '.product-showcase' },
     { target: '.b2b-content', trigger: '.b2b' },
-    { target: '.join-content', trigger: '.join' }
+    { target: '.beta', trigger: '.beta' }
 ];
 
 reveals.forEach(rev => {
@@ -107,16 +108,29 @@ reveals.forEach(rev => {
         opacity: 1,
         y: 0,
         duration: 1.2,
+        stagger: rev.stagger || 0,
         ease: "expo.out",
         scrollTrigger: {
             trigger: rev.trigger,
             start: "top 80%",
-            toggleActions: "play none none none"
         }
     });
 });
 
-// Kinetic Typography for titles
+// Phone Mockup Parallax
+const phone = document.querySelector('.phone-mockup');
+if (phone) {
+    gsap.to(phone, {
+        yPercent: -10,
+        ease: "none",
+        scrollTrigger: {
+            trigger: ".product-showcase",
+            scrub: true
+        }
+    });
+}
+
+// Kinetic Typography
 const kineticTexts = new SplitType('.kinetic-text', { types: 'chars' });
 gsap.from(kineticTexts.chars, {
     y: 100,
@@ -266,7 +280,7 @@ window.addEventListener('mousemove', (e) => {
     material.uniforms.iMouse.value.set(e.clientX, window.innerHeight - e.clientY);
 });
 
-// Smooth scroll to anchors
+// Smooth scroll
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         e.preventDefault();
