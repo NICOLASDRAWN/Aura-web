@@ -9,6 +9,11 @@
 </head>
 <body class="lenis lenis-smooth">
     <div id="custom-cursor"></div>
+    <div class="aura-hud">
+        <div class="hud-item mono">LAT: 4.6097° N</div>
+        <div class="hud-item mono">LON: 74.0817° W</div>
+        <div class="hud-item mono">STATE: ACTIVE</div>
+    </div>
     <div class="noise-overlay"></div>
     <canvas id="liquid-canvas"></canvas>
 
@@ -24,19 +29,24 @@
     <main>
         <!-- Hero Section -->
         <section class="hero">
-            <h1 class="reveal">The City's <span class="italic-serif">Soundtrack</span></h1>
-            <p class="reveal">Descubre música exclusiva explorando tu ciudad. AURA convierte las calles en Drop Zones donde la música cobra vida.</p>
-            <div class="hero-visual reveal">
-                <img src="./hero.png" alt="AURA Experience">
+        <div class="hero-content">
+            <h1 class="display kinetic-text">The City’s</h1>
+            <h1 class="display kinetic-text" style="margin-bottom: 2rem;">Soundtrack</h1>
+            <p class="revealText" style="font-size: 1.2rem; opacity: 0.8; max-width: 500px; margin: 0 auto 3rem;">Reclaim the city's pulse through immersive soundscapes. Gamified music discovery for the modern fan.</p>
+            <div style="display: flex; gap: 1.5rem; justify-content: center;">
+                <a href="#join" class="btn magnetic" data-strength="20">Sondear Aura</a>
+                <button id="pulse-trigger" class="btn btn-outline magnetic" data-strength="15">Escuchar</button>
             </div>
+        </div>
         </section>
 
         <!-- Concept Section -->
         <section id="concept" class="concept">
-            <div class="reveal">
-                <h2 style="font-size: 3.5rem; margin-bottom: 2rem;">La ciudad es tu escenario</h2>
-                <p style="font-size: 1.5rem; max-width: 800px; opacity: 0.8;">AURA no es solo una app de música; es un motor de engagement físico. Gamificamos el descubrimiento musical mediante geovallas que liberan tracks exclusivos, merch y entradas solo cuando estás en el lugar correcto.</p>
-            </div>
+        <div class="concept-content">
+            <h2 class="display kinetic-text">Descubrimiento</h2>
+            <h2 class="display kinetic-text" style="color: var(--color-accent); margin-bottom: 3rem;">Físico</h2>
+            <p style="font-size: 1.4rem; max-width: 600px;">AURA rompe la burbuja digital. Te obligamos a moverte, a sentir la calle y a descubrir artistas donde realmente viven: en el espacio urbano.</p>
+        </div>
         </section>
 
         <!-- Features Section -->

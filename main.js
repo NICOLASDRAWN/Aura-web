@@ -26,33 +26,29 @@ gsap.ticker.add((time) => {
 });
 gsap.ticker.lagSmoothing(0);
 
-// --- 2. CUSTOM CURSOR ---
+// --- 2. ELITE CURSOR ---
 const cursor = document.getElementById('custom-cursor');
-const cursorFollower = { x: 0, y: 0 };
-const cursorMain = { x: 0, y: 0 };
-
-window.addEventListener('mousemove', (e) => {
-    cursorMain.x = e.clientX;
-    cursorMain.y = e.clientY;
-    
-    gsap.to(cursor, {
-        x: e.clientX,
-        y: e.clientY,
-        duration: 0.1,
-        ease: "power2.out"
+if (cursor) {
+    window.addEventListener('mousemove', (e) => {
+        gsap.to(cursor, {
+            x: e.clientX,
+            y: e.clientY,
+            duration: 0.1,
+            ease: "power2.out"
+        });
     });
-});
 
-document.addEventListener('mousedown', () => cursor.classList.add('active'));
-document.addEventListener('mouseup', () => cursor.classList.remove('active'));
+    document.addEventListener('mousedown', () => cursor.classList.add('active'));
+    document.addEventListener('mouseup', () => cursor.classList.remove('active'));
 
-const interactiveElements = document.querySelectorAll('a, button, .magnetic');
-interactiveElements.forEach(el => {
-    el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
-    el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
-});
+    const interactiveElements = document.querySelectorAll('a, button, .magnetic');
+    interactiveElements.forEach(el => {
+        el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+        el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+    });
+}
 
-// --- 3. MAGNETIC ELEMENTS ---
+// --- 3. MAGNETIC & HUD ENGINE ---
 const magneticElements = document.querySelectorAll('.magnetic');
 magneticElements.forEach(el => {
     el.addEventListener('mousemove', (e) => {
@@ -76,29 +72,36 @@ magneticElements.forEach(el => {
         gsap.to(el, {
             x: 0,
             y: 0,
-            duration: 0.6,
+            duration: 0.8,
             ease: "elastic.out(1, 0.3)"
         });
     });
 });
 
-// --- 4. KINETIC TYPOGRAPHY (GSAP + SplitType) ---
-const splitTitles = new SplitType('h1, h2', { types: 'chars, words' });
+// Randomize HUD data
+const hudItems = document.querySelectorAll('.hud-item');
+setInterval(() => {
+    if (hudItems[0]) hudItems[0].textContent = `LAT: ${(4.6 + Math.random() * 0.01).toFixed(4)}° N`;
+    if (hudItems[1]) hudItems[1].textContent = `LON: ${(74.08 + Math.random() * 0.01).toFixed(4)}° W`;
+}, 2000);
 
-gsap.from(splitTitles.chars, {
-    opacity: 0,
+// --- 4. KINETIC TYPOGRAPHY (V4.0) ---
+const kineticTexts = new SplitType('.kinetic-text', { types: 'chars' });
+
+gsap.from(kineticTexts.chars, {
     y: 100,
-    rotateX: -90,
-    stagger: 0.02,
-    duration: 1,
-    ease: "back.out(1.7)",
+    rotateZ: 10,
+    opacity: 0,
+    stagger: 0.03,
+    duration: 1.5,
+    ease: "expo.out",
     scrollTrigger: {
-        trigger: 'h1',
+        trigger: '.hero',
         start: "top 80%",
     }
 });
 
-// --- 5. THREE.JS LIQUID ENGINE (Background & Image) ---
+// --- 5. CINEMATIC THREE.JS ENGINE (Shaders V4.0) ---
 const canvas = document.getElementById('liquid-canvas');
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -107,16 +110,16 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 const scene = new THREE.Scene();
 const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
 
-// Fragment Shader for Background & Image
 const fragmentShader = `
     uniform float iTime;
     uniform vec2 iResolution;
     uniform vec2 iMouse;
-    uniform sampler2D uTexture;
-    uniform float uMix;
+    uniform float iScroll;
+    uniform float iPulse;
 
     varying vec2 vUv;
 
+    // Simplex Noise
     vec3 permute(vec3 x) { return mod(((x*34.0)+1.0)*x, 289.0); }
     float snoise(vec2 v){
       const vec4 C = vec4(0.211324865405187, 0.366025403784439,
@@ -144,49 +147,56 @@ const fragmentShader = `
       return 130.0 * dot(m, g);
     }
 
+    float random (vec2 st) {
+        return fract(sin(dot(st.xy, vec2(12.9898,78.233))) * 43758.5453123);
+    }
+
     void main() {
         vec2 uv = vUv;
         vec2 mouse = iMouse / iResolution;
         
-        float dist = distance(uv, mouse);
-        float force = smoothstep(0.3, 0.0, dist) * 0.02;
+        // 1. Chromatic Aberration driven by scroll/pulse
+        float offset = 0.002 * (1.0 + iScroll * 2.0 + iPulse * 5.0);
         
-        float n = snoise(uv * 3.0 + iTime * 0.1);
-        float n2 = snoise(uv * 2.0 - iTime * 0.05 + mouse * 2.0);
-        float liquid = n * 0.5 + n2 * 0.5;
-
-        // Apply displacement to UV
-        vec2 displacedUv = uv + n * 0.01 + force;
+        float r = snoise(uv * 2.0 + iTime * 0.1);
+        float g = snoise(uv * 2.0 + iTime * 0.1 + offset);
+        float b = snoise(uv * 2.0 + iTime * 0.1 - offset);
         
-        // Background Iridescence
+        float liquid = r; // base liquid factor
+        
+        // 2. Base Colors (Aura Palette Refined)
         vec3 col1 = vec3(0.98, 0.98, 0.97); // Off-white
-        vec3 col2 = vec3(0.63, 0.36, 0.91); // Purple
-        vec3 col3 = vec3(0.45, 0.72, 0.99); // Blue
+        vec3 col2 = vec3(0.42, 0.36, 0.95); // Deep Purple
+        vec3 col3 = vec3(0.35, 0.72, 0.99); // Electric Blue
         
-        vec3 bgCol = mix(col1, col2, smoothstep(0.1, 0.5, liquid));
-        bgCol = mix(bgCol, col3, smoothstep(0.4, 0.8, liquid));
-
-        gl_FragColor = vec4(bgCol, 1.0);
-    }
-`;
-
-const vertexShader = `
-    varying vec2 vUv;
-    void main() {
-        vUv = uv;
-        gl_Position = vec4(position, 1.0);
+        vec3 finalCol = mix(col1, col2, smoothstep(0.1, 0.6, r));
+        finalCol = mix(finalCol, col3, smoothstep(0.4, 0.9, g));
+        
+        // 3. Film Grain
+        float grain = (random(uv + iTime) - 0.5) * 0.05;
+        finalCol += grain;
+        
+        gl_FragColor = vec4(finalCol, 1.0);
     }
 `;
 
 const uniforms = {
     iTime: { value: 0 },
     iResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
-    iMouse: { value: new THREE.Vector2(0, 0) }
+    iMouse: { value: new THREE.Vector2(0, 0) },
+    iScroll: { value: 0 },
+    iPulse: { value: 0 }
 };
 
 const material = new THREE.ShaderMaterial({
     uniforms,
-    vertexShader,
+    vertexShader: `
+        varying vec2 vUv;
+        void main() {
+            vUv = uv;
+            gl_Position = vec4(position, 1.0);
+        }
+    `,
     fragmentShader,
     transparent: true
 });
@@ -196,12 +206,49 @@ scene.add(mesh);
 
 function animate(time) {
     uniforms.iTime.value = time * 0.001;
+    uniforms.iScroll.value = window.scrollY / document.body.scrollHeight;
     renderer.render(scene, camera);
     requestAnimationFrame(animate);
 }
 requestAnimationFrame(animate);
 
-// Resize handling
+// --- 6. PULSE ENGINE ---
+const pulseBtn = document.getElementById('pulse-trigger');
+if (pulseBtn) {
+    pulseBtn.addEventListener('click', () => {
+        gsap.to(uniforms.iPulse, {
+            value: 1,
+            duration: 0.1,
+            ease: "power2.out",
+            onComplete: () => {
+                gsap.to(uniforms.iPulse, {
+                    value: 0,
+                    duration: 1.5,
+                    ease: "expo.out"
+                });
+            }
+        });
+        
+        confetti({
+            particleCount: 50,
+            spread: 50,
+            origin: { y: 0.8 },
+            colors: ['#6C5CE7', '#0984E3']
+        });
+    });
+}
+
+// Form logic
+const form = document.getElementById('waitlist-form');
+if (form) {
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const btn = form.querySelector('button');
+        btn.textContent = 'Aura Sincronizada';
+        btn.style.background = '#6C5CE7';
+    });
+}
+
 window.addEventListener('resize', () => {
     renderer.setSize(window.innerWidth, window.innerHeight);
     uniforms.iResolution.value.set(window.innerWidth, window.innerHeight);
@@ -210,27 +257,3 @@ window.addEventListener('resize', () => {
 window.addEventListener('mousemove', (e) => {
     uniforms.iMouse.value.set(e.clientX, window.innerHeight - e.clientY);
 });
-
-// --- 6. UTILS & FORM ---
-const confettiBtn = document.getElementById('trigger-confetti');
-if (confettiBtn) {
-    confettiBtn.addEventListener('click', () => {
-        confetti({
-            particleCount: 150,
-            spread: 70,
-            origin: { y: 0.6 },
-            colors: ['#a29bfe', '#74b9ff', '#81ecec', '#fab1a0']
-        });
-    });
-}
-
-const form = document.getElementById('waitlist-form');
-if (form) {
-    form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const btn = form.querySelector('button');
-        btn.textContent = '¡Bienvenido!';
-        btn.style.background = '#00b894';
-        form.reset();
-    });
-}
